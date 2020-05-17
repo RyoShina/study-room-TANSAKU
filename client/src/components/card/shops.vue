@@ -1,16 +1,19 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
+  <v-card class="mx-auto" max-width="344" color="purple lighten-5">
     <v-card-text align="left">
-      <div>２３区名</div>
-      <v-img src="@/assets/unset-img.jpg" height="200px"></v-img>
+      <div>{{ card.word }}</div>
+      <v-img v-if="card.imgSrc" :src="card.imgSrc" height="200px"></v-img>
+      <v-img v-else src="@/assets/unset-img.jpg" height="200px"></v-img>
       <p class="display-1 text--primary">
-        店舗名
+        {{ card.store }}
       </p>
-      <v-chip class="ma-2">Default</v-chip>
-      <v-chip class="ma-2">Default</v-chip>
-      <v-chip class="ma-2">Default</v-chip>
-      <v-chip class="ma-2">Default</v-chip>
-      <v-chip class="ma-2">Default</v-chip>
+      <v-chip
+        v-for="(value, index) in card.tags"
+        :key="card._id + '_' + index"
+        class="ma-2"
+        color="deep-purple lighten-4"
+        >{{ value }}</v-chip
+      >
     </v-card-text>
     <v-card-actions>
       <v-btn text color="deep-purple accent-4">
@@ -23,6 +26,8 @@
 <script>
 export default {
   name: "CardShops",
-  data: () => ({}),
+  props: {
+    card: Object,
+  },
 };
 </script>
