@@ -1,10 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      right
-    >
+    <v-navigation-drawer v-model="drawer" app right>
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
@@ -28,11 +24,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      color="cyan"
-      dark
-    >
+    <v-app-bar app color="deep-purple" dark>
       <v-spacer></v-spacer>
 
       <v-toolbar-title>Study room 探索</v-toolbar-title>
@@ -41,14 +33,8 @@
     </v-app-bar>
 
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
           <v-col class="text-center">
             <router-view></router-view>
           </v-col>
@@ -56,10 +42,7 @@
       </v-container>
     </v-content>
 
-    <v-footer
-      color="cyan"
-      app
-    >
+    <v-footer color="deep-purple" app>
       <v-spacer></v-spacer>
 
       <span class="white--text">&copy; 2020</span>
@@ -68,13 +51,10 @@
 </template>
 
 <script>
-  export default {
-    name: 'LayoutsDemosBaselineFlipped',
-    props: {
-      source: String,
-    },
-    data: () => ({
-      drawer: null,
-    }),
-  }
+export default {
+  name: "StudyRoomSearchApps",
+  data: () => ({
+    drawer: null,
+  }),
+};
 </script>
