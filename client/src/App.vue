@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app right>
+    <v-navigation-drawer v-model="drawer" app>
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
@@ -25,15 +25,15 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="deep-purple" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
       <v-spacer></v-spacer>
 
-      <v-toolbar-title>Study room 探索</v-toolbar-title>
-
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>Study room TANSAKU</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
-      <v-container class="fill-height" fluid>
+      <v-container class="grey lighten-4 fill-height" fluid>
         <v-row align="center" justify="center">
           <v-col class="text-center">
             <router-view></router-view>
@@ -44,7 +44,6 @@
 
     <v-footer color="deep-purple" app>
       <v-spacer></v-spacer>
-
       <span class="white--text">&copy; 2020</span>
     </v-footer>
   </v-app>
@@ -52,7 +51,7 @@
 
 <script>
 export default {
-  name: "StudyRoomSearchApps",
+  name: "StudyRoomTANSAKUApps",
   data: () => ({
     drawer: null,
   }),
