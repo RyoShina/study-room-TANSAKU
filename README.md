@@ -1,2 +1,2 @@
-# node-1-apps
+# Study room TANSAKU
 Test projects.
