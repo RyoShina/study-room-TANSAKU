@@ -1,0 +1,21 @@
+{
+  "name": "tansaku-apps-service",
+  "version": "1.0.0",
+  "author": "r-shina",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js NODE_ENV=development",
+    "start": "node index.js NODE_ENV=production"
+  },
+  "dependencies": {
+    "@types/validator": "^10.11.3",
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "moment-timezone": "^0.5.26",
+    "mongoose": "^5.6.7",
+    "mongoose-long": "^0.2.1"
+  },
+  "devDependencies": {}
+}
