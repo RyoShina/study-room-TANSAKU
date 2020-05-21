@@ -1,6 +1,7 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "tansaku-apps",
+  "version": "1.0.0",
+  "author": "r-shina",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
