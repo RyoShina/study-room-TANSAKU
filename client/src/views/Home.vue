@@ -59,7 +59,7 @@
 
 <script>
 // @ is an alias to /src
-import CardRoom from '@/components/card/room'
+import CardRoom from '@/components/card/Room'
 import {roomService} from '@/service'
 
 export default {

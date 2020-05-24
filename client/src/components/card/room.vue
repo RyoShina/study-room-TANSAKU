@@ -14,7 +14,7 @@
         src="@/assets/unset-img.jpg"
         height="200px" />
       <p class="display-1 text--primary">
-        {{ card.store }}
+        {{ card.name }}
       </p>
       <v-chip
         v-for="(value, index) in card.tags"
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: 'CardShops',
+  name: 'CardRoom',
   props: {
     card: {
       type: Object,
