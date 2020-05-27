@@ -12,8 +12,6 @@ router.get("", async function(req, res) {
       isDelete: false
     };
     const result = await models.rooms.find(query, {});
-    console.log(result);
-
     return res.json(result);
   } catch (err) {
     console.error(err);

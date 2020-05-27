@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mx-auto"
-    max-width="344"
+    width="344"
     color="purple lighten-5">
     <v-card-text align="left">
       <div>{{ card.word }}</div>

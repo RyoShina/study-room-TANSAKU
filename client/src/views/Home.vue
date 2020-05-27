@@ -3,55 +3,33 @@
     <v-row
       align="start"         
       justify="start">
-      <v-col class="">
+      <v-col>
         <div
-          color="deep-purple">
-          <div
-            class="d-flex justify-start"
-            height="200px">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              color="pink"
-              @click="onClickSearch">
-              <v-icon dark>
-                mdi-magnify
-              </v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              color="pink"
-              @click="onClickSearch">
-              <v-icon dark>
-                mdi-magnify
-              </v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              color="pink"
-              @click="onClickSearch">
-              <v-icon dark>
-                mdi-magnify
-              </v-icon>
-            </v-btn>
-          </div>
+          class="d-flex justify-start"
+          height="200px">
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="pink"
+            @click="onClickSearch">
+            <v-icon dark>
+              mdi-magnify
+            </v-icon>
+          </v-btn>
+          <v-spacer />
+          <p>{{ cards.length }}件Hit！</p>
         </div>
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
-        <CardRoom
-          v-for="card in cards"
-          :key="card._id"
-          :card="card" />
+      <v-col
+        v-for="card in cards"
+        :key="card._id">
+        <v-row justify="space-between">
+          <CardRoom :card="card" />
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -77,17 +55,6 @@ export default {
         this.cards = []
       }
     }
-
-    // onClickSearch: async () =>{
-    //   try {
-    //     console.log(this)
-    //     const searchResult = await roomService.fetchRooms()
-    //     console.log(searchResult)
-    //   } catch (err){
-    //     console.log(err)
-    //     // this.cards = []
-    //   }
-    // }
   }
 }
 </script>
