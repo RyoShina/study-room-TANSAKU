@@ -18,8 +18,23 @@
               mdi-magnify
             </v-icon>
           </v-btn>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="pink"
+            @click="onClickSearch">
+            <v-icon dark>
+              mdi-cog
+            </v-icon>
+          </v-btn>
           <v-spacer />
-          <p>{{ cards.length }}件Hit！</p>
+          <div v-if="cards.length">
+            <v-sheet color="deep-purple lighten-4">
+              {{ cards.length }}件Hit！
+            </v-sheet>
+          </div>
         </div>
       </v-col>
     </v-row>
