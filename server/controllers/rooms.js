@@ -11,7 +11,11 @@ router.get("", async function(req, res) {
     const query = {
       isDelete: false
     };
-    const result = await models.rooms.find(query, {});
+    const option = {
+      skip: 0,
+      limit: 10
+    }
+    const result = await models.rooms.find(query, option);
     return res.json(result);
   } catch (err) {
     console.error(err);
