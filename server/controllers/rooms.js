@@ -1,22 +1,25 @@
 const express = require("express"),
+  getterUtil = require("../utils/getterUtil"),  
   router = express.Router(),
   models = {
     rooms: require("../models/rooms.js"),
-  }
-
-const moment = require("moment-timezone");
+  },
+  moment = require("moment-timezone");
 
 router.get("", async function(req, res) {
   try {
-    const query = {
-      isDelete: false
-    };
-    const option = {
-      skip: 0,
-      limit: 10
-    }
-    const result = await models.rooms.find(query, option);
-    return res.json(result);
+    const option = getterUtil.getObjectFromJsonString(req, "option", {})
+    const condition = getterUtil.getObjectFromJsonString(req, "condition", {})
+    condition.isDelete = false
+
+    const result = await models.rooms.find(condition, option);
+    const documentTotal = await models.rooms.countDocuments(condition)
+    result.documentTotal = documentTotal
+
+    return res.json({
+      data: result,
+      documentTotal
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json(null);

@@ -4,9 +4,10 @@
     max-width="500">
     <v-list>
       <v-list-item-group
-        v-model="model"
+        v-model="index"
         active-class="active-item"
-        mandatory>
+        mandatory
+        @change="onChangeSelectd()">
         <v-list-item
           v-for="(item, i) in items"
           :key="i">
@@ -26,14 +27,18 @@ export default {
   name: 'RoomSearchMenu',
   data: () => ({
     items: constantsService.getRoomSearchMethods,
-    model: 0
+    index: 0
   }),
+  methods: {
+    onChangeSelectd: function(){
+      this.$emit('onChangeSelectd', this.index)
+    }
+  }
 }
 </script>
 
 <style scoped>
 .active-item {
   border: 2px dashed deeppink;
-
 }
 </style>

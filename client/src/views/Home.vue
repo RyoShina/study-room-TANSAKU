@@ -1,48 +1,38 @@
 <template>
   <v-container fluid>
-    <v-row no-gutters>
+    <v-row>
       <v-col cols="2">
-        <RoomSearchMenu />
+        <RoomSearchMenu @onChangeSelectd="onChangeSearchMenuIndex" />
       </v-col>
       <v-spacer />
-      <v-col cols="9">
-        <v-row>
-          <v-col cols="9">
-            <div
-              class="d-flex justify-start"
-              height="200px">
-              <v-combobox
-                v-model="words.searchOption"
-                :items="constants.words"
-                chips
-                clearable
-                label="２３区名を選択してください"
-                multiple
-                solo>
-                <template v-slot:selection="{ attrs, item, select, selected }">
-                  <v-chip
-                    v-bind="attrs"
-                    :input-value="selected"
-                    close
-                    @click="select"
-                    @click:close="remove(item)">
-                    <strong>{{ item }}</strong>&nbsp;
-                  </v-chip>
-                </template>
-              </v-combobox>
-              <div v-if="words.searchResult.length">
-                <v-sheet color="deep-purple lighten-4">
-                  {{ words.wsearchResultords.length }}件Hit！
-                </v-sheet>
-              </div>
-            </div>
+      <v-col
+        v-show="isShowNewArrivalComponent"
+        cols="10">
+        <v-row justify="start">
+          <v-col
+            v-for="card in searchResultByNewArrival"
+            :key="card._id">
+            <v-row>
+              <CardRoom :card="card" />
+            </v-row>
           </v-col>
         </v-row>
-        <v-row>
+      </v-col>
+      <v-col
+        v-show="isShowWordComponent"
+        cols="10">
+        <v-row no-gutters>
+          <v-col cols="9">
+            <WordSearch
+              @searchTotalCount="searchTotalCountByWord"
+              @onChangeWord="onChangeSearchWord" />
+          </v-col>
+        </v-row>
+        <v-row justify="start">
           <v-col
-            v-for="card in newArrival.searchResult"
+            v-for="card in searchResultByWord"
             :key="card._id">
-            <v-row justify="space-between">
+            <v-row>
               <CardRoom :card="card" />
             </v-row>
           </v-col>
@@ -56,6 +46,7 @@
 // @ is an alias to /src
 import CardRoom from '@/components/card/Room'
 import RoomSearchMenu from '@/components/ItemGroups/RoomSearchMenu'
+import WordSearch from '@/components/select/WordSearch'
 
 import {constantsService, roomService} from '@/service'
 
@@ -63,42 +54,84 @@ export default {
   name: 'Home',
   components: {
     CardRoom,
-    RoomSearchMenu
+    RoomSearchMenu,
+    WordSearch
   },
   data: () => ({
-    constants: {
-      words: constantsService.getWord
+    roomSearchMenu: {
+      selectedIndex: 0
     },
     newArrival: {
-      searchResult: [],
-      searchOption: []
+      searchResult: {
+        data: []
+      },
+      searchOption: {
+        limit: 10,
+        skip: 0
+      }
     },
-    words: {
-      searchResult: [],
-      searchOption: []
+    word: {
+      searchResult: {
+        data: [],
+        documentTotal: 0
+      },
+      searchOption: {
+        limit: 10,
+        skip: 0
+      }
     }
   }),
+  computed: {
+    isShowNewArrivalComponent: function(){
+      return this.roomSearchMenu.selectedIndex === 0 
+    },
+    isShowWordComponent: function(){
+      return this.roomSearchMenu.selectedIndex === 1
+    },
+    searchResultByNewArrival: function(){
+      return this.newArrival.searchResult && this.newArrival.searchResult.data
+        ? this.newArrival.searchResult.data
+        : []
+    },
+    searchResultByWord: function(){
+      return this.word.searchResult && this.word.searchResult.data
+        ? this.word.searchResult.data
+        : []
+    },
+    searchTotalCountByWord: function(){
+      return this.word.searchResult && this.word.searchResult.documentTotal
+        ? this.word.searchResult.documentTotal
+        : 0
+    }
+  },
   mounted: async function() {
     try {
-      this.newArrival.searchResult = await roomService.fetchRooms()
+      this.newArrival.searchResult = await roomService.fetchRooms(
+        {}, 
+        this.newArrival.searchOption.limit, 
+        this.newArrival.searchOption.skip
+      )
     } catch (err){
       console.log(err)
-      this.words.searchResult = []
+      this.newArrival.searchResult = {}
     }
   },
   methods: {
-    onClickSearch: async function(){
+    onChangeSearchWord: async function(word=''){
+      if (!word) return
       try {
-        this.words.searchResult = await roomService.fetchRooms()
+        this.word.searchResult = await roomService.fetchRooms(
+          word, 
+          this.word.searchOption.limit, 
+          this.word.searchOption.skip)
       } catch (err){
         console.log(err)
-        this.words.searchResult = []
+        this.word.searchResult = {}
       }
     },
-    remove: function(item) {
-      this.words.searchOptions.splice(this.words.searchOptions.indexOf(item), 1)
-      this.words.searchOptions = [...this.words.searchOptions]
-    },
+    onChangeSearchMenuIndex: function(index){
+      this.roomSearchMenu.selectedIndex = index
+    }
   }
 }
 </script>
