@@ -121,7 +121,7 @@ export default {
       if (!word) return
       try {
         this.word.searchResult = await roomService.fetchRooms(
-          word, 
+          {'word': word}, 
           this.word.searchOption.limit, 
           this.word.searchOption.skip)
       } catch (err){
