@@ -1,11 +1,16 @@
 import {axiosBase} from '@/service/config'
 
-async function fetchRooms(){
+async function fetchRooms(condition={}, limit=0, skip=0){
   const url = '/api/v1/rooms'
   const config = {
-    params: {}
+    params: {
+      condition,
+      option: {
+        limit,
+        skip
+      }
+    }
   }
-
   try {
     const res = await axiosBase.get(url, config)
     if (res && res.status === 200){

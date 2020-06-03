@@ -1,34 +1,41 @@
 <template>
   <v-container fluid>
-    <v-row
-      align="start"         
-      justify="start">
-      <v-col>
-        <div
-          class="d-flex justify-start"
-          height="200px">
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            color="pink"
-            @click="onClickSearch">
-            <v-icon dark>
-              mdi-magnify
-            </v-icon>
-          </v-btn>
-          <v-spacer />
-          <p>{{ cards.length }}件Hit！</p>
-        </div>
-      </v-col>
-    </v-row>
     <v-row>
+      <v-col cols="2">
+        <RoomSearchMenu @onChangeSelectd="onChangeSearchMenuIndex" />
+      </v-col>
+      <v-spacer />
       <v-col
-        v-for="card in cards"
-        :key="card._id">
-        <v-row justify="space-between">
-          <CardRoom :card="card" />
+        v-show="isShowNewArrivalComponent"
+        cols="10">
+        <v-row justify="start">
+          <v-col
+            v-for="card in searchResultByNewArrival"
+            :key="card._id">
+            <v-row>
+              <CardRoom :card="card" />
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col
+        v-show="isShowWordComponent"
+        cols="10">
+        <v-row no-gutters>
+          <v-col cols="9">
+            <WordSearch
+              @searchTotalCount="searchTotalCountByWord"
+              @onChangeWord="onChangeSearchWord" />
+          </v-col>
+        </v-row>
+        <v-row justify="start">
+          <v-col
+            v-for="card in searchResultByWord"
+            :key="card._id">
+            <v-row>
+              <CardRoom :card="card" />
+            </v-row>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -38,22 +45,92 @@
 <script>
 // @ is an alias to /src
 import CardRoom from '@/components/card/Room'
-import {roomService} from '@/service'
+import RoomSearchMenu from '@/components/itemGroups/RoomSearchMenu'
+import WordSearch from '@/components/select/WordSearch'
+
+import {constantsService, roomService} from '@/service'
 
 export default {
   name: 'Home',
   components: {
     CardRoom,
+    RoomSearchMenu,
+    WordSearch
   },
-  data: () => ({ cards: [] }),
+  data: () => ({
+    roomSearchMenu: {
+      selectedIndex: 0
+    },
+    newArrival: {
+      searchResult: {
+        data: []
+      },
+      searchOption: {
+        limit: 10,
+        skip: 0
+      }
+    },
+    word: {
+      searchResult: {
+        data: [],
+        documentTotal: 0
+      },
+      searchOption: {
+        limit: 10,
+        skip: 0
+      }
+    }
+  }),
+  computed: {
+    isShowNewArrivalComponent: function(){
+      return this.roomSearchMenu.selectedIndex === 0 
+    },
+    isShowWordComponent: function(){
+      return this.roomSearchMenu.selectedIndex === 1
+    },
+    searchResultByNewArrival: function(){
+      return this.newArrival.searchResult && this.newArrival.searchResult.data
+        ? this.newArrival.searchResult.data
+        : []
+    },
+    searchResultByWord: function(){
+      return this.word.searchResult && this.word.searchResult.data
+        ? this.word.searchResult.data
+        : []
+    },
+    searchTotalCountByWord: function(){
+      return this.word.searchResult && this.word.searchResult.documentTotal
+        ? this.word.searchResult.documentTotal
+        : 0
+    }
+  },
+  mounted: async function() {
+    try {
+      this.newArrival.searchResult = await roomService.fetchRooms(
+        {}, 
+        this.newArrival.searchOption.limit, 
+        this.newArrival.searchOption.skip
+      )
+    } catch (err){
+      console.log(err)
+      this.newArrival.searchResult = {}
+    }
+  },
   methods: {
-    onClickSearch: async function(){
+    onChangeSearchWord: async function(word=''){
+      if (!word) return
       try {
-        this.cards = await roomService.fetchRooms()
+        this.word.searchResult = await roomService.fetchRooms(
+          {'word': word}, 
+          this.word.searchOption.limit, 
+          this.word.searchOption.skip)
       } catch (err){
         console.log(err)
-        this.cards = []
+        this.word.searchResult = {}
       }
+    },
+    onChangeSearchMenuIndex: function(index){
+      this.roomSearchMenu.selectedIndex = index
     }
   }
 }
