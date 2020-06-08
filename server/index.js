@@ -9,7 +9,7 @@ mongoose.connect(settings.MONGODB_CONN, { useNewUrlParser: true, useUnifiedTopol
     console.log("Mongo database connection is successful");
   },
   err => {
-    console.log("Error when connecting to the mongo database" + err);
+    console.log("Error when connecting to the mongo database", err);
   }
 );
 
