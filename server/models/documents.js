@@ -5,7 +5,7 @@ const roomsSchema = mongoose.Schema(
   {
     name: String,
     word: String,
-    tags: { type: [SchemaTypes.String] },    
+    tags: { type: [SchemaTypes.String] },
     created: Date,
     modified: Date,
     isDelete: Boolean
