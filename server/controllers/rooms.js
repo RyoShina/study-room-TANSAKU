@@ -17,7 +17,7 @@ router.get("", async function(req, res) {
     result.documentTotal = documentTotal
 
     return res.json({
-      data: result,
+      result,
       documentTotal
     });
   } catch (err) {

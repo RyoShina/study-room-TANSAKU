@@ -1,5 +1,6 @@
 const _axiosBase = require('axios')
-const axiosBase = _axiosBase.create({
+
+export default _axiosBase.create({
   baseURL: 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
@@ -7,5 +8,3 @@ const axiosBase = _axiosBase.create({
   },
   responseType: 'json'
 })
-
-export {axiosBase}
