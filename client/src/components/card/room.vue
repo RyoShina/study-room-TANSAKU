@@ -5,7 +5,7 @@
     color="purple lighten-5">
     <v-card-text align="left">
       <div>{{ card.word }}</div>
-      <v-img
+      <S3Image
         v-if="card.imgSrc"
         :src="card.imgSrc"
         height="200px" />
@@ -35,14 +35,16 @@
 </template>
 
 <script>
+import S3Image from '@/components/img/S3Image'
+
 export default {
   name: 'CardRoom',
+  components: {S3Image},
   props: {
     card: {
       type: Object,
       default: null
     },
   },
-  
 }
 </script>

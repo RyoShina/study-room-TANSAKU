@@ -3,10 +3,10 @@ import Repository from './Repository'
 const resource = '/api/v1/rooms'
 
 export default {
-  get(payload) {
-    return Repository.get(`${resource}`, payload)
+  get(params) {
+    return Repository.get(`${resource}`, params)
   },
-  getPost(postId) {
-    return Repository.get(`${resource}/${rpostId}`)
+  getRoom(roomId) {
+    return Repository.get(`${resource}/${roomId}`)
   }
 }

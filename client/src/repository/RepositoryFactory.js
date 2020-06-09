@@ -1,6 +1,8 @@
+import DocumentsRepository from './documentsRepository'
 import RoomsRepository from './roomsRepository'
 
 const repositories = {
+  documents: DocumentsRepository,
   rooms: RoomsRepository
 }
 

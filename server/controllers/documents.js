@@ -13,10 +13,12 @@ AWS.config.update({
 
 router.get("", async function(req, res) {
   try {
+    const docKey = getterUtil.getString(req, "docKey", {})
+
     const s3 = new AWS.S3({region: settings.AWS_REGION})
     const s3Params = {
       Bucket: settings.AWS_BUCKET,
-      Key: "documents/1025-4951x3301.jpg"
+      Key: docKey
     };
     s3.headObject(s3Params, function(err, data) {
       if(err){
@@ -29,7 +31,7 @@ router.get("", async function(req, res) {
         return res.status(500).json(null);
       })
 
-      res.attachment("documents/1025-4951x3301.jpg")
+      res.attachment(docKey)
       stream.pipe(res)
     });
   } catch (err) {
