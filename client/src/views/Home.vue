@@ -6,11 +6,11 @@
       </v-col>
       <v-spacer />
       <v-col
-        v-show="isShowNewArrivalComponent"
+        v-show="showNewArrivalComponent"
         cols="10">
         <v-row justify="start">
           <v-col
-            v-for="card in searchResultByNewArrival"
+            v-for="card in newArrival.result"
             :key="card._id">
             <v-row>
               <CardRoom :card="card" />
@@ -19,18 +19,18 @@
         </v-row>
       </v-col>
       <v-col
-        v-show="isShowWordComponent"
+        v-show="showWordComponent"
         cols="10">
         <v-row no-gutters>
           <v-col cols="9">
             <WordSearch
-              @searchTotalCount="searchTotalCountByWord"
-              @onChangeWord="onChangeSearchWord" />
+              @searchTotalCount="word.resultTotal"
+              @onChangeWord="onChangeWord" />
           </v-col>
         </v-row>
         <v-row justify="start">
           <v-col
-            v-for="card in searchResultByWord"
+            v-for="card in word.result"
             :key="card._id">
             <v-row>
               <CardRoom :card="card" />
@@ -48,7 +48,9 @@ import CardRoom from '@/components/card/Room'
 import RoomSearchMenu from '@/components/itemGroups/RoomSearchMenu'
 import WordSearch from '@/components/select/WordSearch'
 
-import {constantsService, roomService} from '@/service'
+import {constantsService} from '@/service'
+import { RepositoryFactory } from '@/repository/RepositoryFactory'
+const RoomsRepository = RepositoryFactory.get('rooms')
 
 export default {
   name: 'Home',
@@ -61,76 +63,98 @@ export default {
     roomSearchMenu: {
       selectedIndex: 0
     },
+    isLoading: false,
     newArrival: {
-      searchResult: {
-        data: []
-      },
-      searchOption: {
-        limit: 10,
-        skip: 0
+      result: [],
+      resultTotal: 0,
+      params: {
+        condition: {
+        },
+        option: {
+          limit: 10,
+          skip: 0
+        }
       }
     },
     word: {
-      searchResult: {
-        data: [],
-        documentTotal: 0
-      },
-      searchOption: {
-        limit: 10,
-        skip: 0
+      result: [],
+      resultTotal: 0,
+      params: {
+        condition: {
+          word: ''
+        },
+        option: {
+          limit: 10,
+          skip: 0
+        }
       }
     }
   }),
   computed: {
-    isShowNewArrivalComponent: function(){
+    showNewArrivalComponent: function(){
       return this.roomSearchMenu.selectedIndex === 0 
     },
-    isShowWordComponent: function(){
+    showWordComponent: function(){
       return this.roomSearchMenu.selectedIndex === 1
-    },
-    searchResultByNewArrival: function(){
-      return this.newArrival.searchResult && this.newArrival.searchResult.data
-        ? this.newArrival.searchResult.data
-        : []
-    },
-    searchResultByWord: function(){
-      return this.word.searchResult && this.word.searchResult.data
-        ? this.word.searchResult.data
-        : []
-    },
-    searchTotalCountByWord: function(){
-      return this.word.searchResult && this.word.searchResult.documentTotal
-        ? this.word.searchResult.documentTotal
-        : 0
     }
   },
   mounted: async function() {
     try {
-      this.newArrival.searchResult = await roomService.fetchRooms(
-        {}, 
-        this.newArrival.searchOption.limit, 
-        this.newArrival.searchOption.skip
-      )
+      await this.fetchByNewArrival()
     } catch (err){
       console.log(err)
       this.newArrival.searchResult = {}
     }
   },
   methods: {
-    onChangeSearchWord: async function(word=''){
-      if (!word) return
-      try {
-        this.word.searchResult = await roomService.fetchRooms(
-          {'word': word}, 
-          this.word.searchOption.limit, 
-          this.word.searchOption.skip)
-      } catch (err){
-        console.log(err)
-        this.word.searchResult = {}
-      }
-    },
     onChangeSearchMenuIndex: function(index){
       this.roomSearchMenu.selectedIndex = index
+    },
+    onChangeWord: async function(word=''){
+      if (!word) return
+      this.initFetchParamsByWord(word)
+      await this.fetchByWord()
+    },
+    fetchByNewArrival: async function(){
+      try {
+        this.isLoading = true
+        const { data } = await RoomsRepository.get({params: this.newArrival.params})
+        this.isLoading = false
+
+        this.newArrival.result = data.result
+        this.newArrival.resultTotal = data.documentTotal
+      } catch (err){
+        console.log(err)
+        this.isLoading = false
+        this.newArrival.result = []
+        this.newArrival.resultTotal = 0
+      }
+    },
+    fetchByWord: async function(){
+      try {
+        this.isLoading = true
+        const { data } = await RoomsRepository.get({params: this.word.params})
+        this.isLoading = false
+
+        this.word.result = data.result
+        this.word.resultTotal = data.documentTotal
+      } catch (err){
+        console.log(err)
+        this.isLoading = false
+        this.word.result = []
+        this.word.resultTotal = 0
+      }
+    },    
+    initFetchParamsByWord(word=''){
+      this.word.params = {
+        condition: {
+          word: word
+        },
+        option: {
+          limit: 10,
+          skip: 0
+        }
+      }
     }
   }
 }

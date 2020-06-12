@@ -2,22 +2,19 @@ const express = require("express"),
   getterUtil = require("../utils/getterUtil"),  
   router = express.Router(),
   models = {
-    rooms: require("../models/rooms.js"),
+    rooms: require("../models/rooms"),
   },
   moment = require("moment-timezone");
-
 router.get("", async function(req, res) {
   try {
     const option = getterUtil.getObjectFromJsonString(req, "option", {})
     const condition = getterUtil.getObjectFromJsonString(req, "condition", {})
     condition.isDelete = false
 
-    const result = await models.rooms.find(condition, option);
+    let result = await models.rooms.find(condition, option);
     const documentTotal = await models.rooms.countDocuments(condition)
-    result.documentTotal = documentTotal
-
     return res.json({
-      data: result,
+      result,
       documentTotal
     });
   } catch (err) {
