@@ -6,7 +6,7 @@ export default {
   get(params) {
     return Repository.get(`${resource}`, params)
   },
-  getRoom(roomId) {
+  getById(roomId) {
     return Repository.get(`${resource}/${roomId}`)
   }
 }

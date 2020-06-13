@@ -5,7 +5,8 @@ const express = require("express"),
     rooms: require("../models/rooms"),
   },
   moment = require("moment-timezone");
-router.get("", async function(req, res) {
+
+  router.get("", async function(req, res) {
   try {
     const option = getterUtil.getObjectFromJsonString(req, "option", {})
     const condition = getterUtil.getObjectFromJsonString(req, "condition", {})
@@ -17,6 +18,18 @@ router.get("", async function(req, res) {
       result,
       documentTotal
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(null);
+  }
+});
+
+router.get("/:roomId", async function(req, res) {
+  try {
+    const roomId = getterUtil.getString(req, "roomId", {})
+
+    let result = await models.rooms.findById(roomId)
+    return res.json(result);
   } catch (err) {
     console.error(err);
     return res.status(500).json(null);

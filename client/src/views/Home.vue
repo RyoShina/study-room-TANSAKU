@@ -44,7 +44,7 @@
 
 <script>
 // @ is an alias to /src
-import CardRoom from '@/components/card/Room'
+import CardRoom from '@/components/card/room'
 import RoomSearchMenu from '@/components/itemGroups/RoomSearchMenu'
 import WordSearch from '@/components/select/WordSearch'
 

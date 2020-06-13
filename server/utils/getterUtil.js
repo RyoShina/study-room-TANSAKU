@@ -22,7 +22,7 @@ exports.getNumber = function(request, key = "", defaultValue = 0){
     if("query" in request && key in request.query){
       return validator.toInt(request.query[key])
     } else if("params" in request && key in request.params){
-      return validator.toInt(params.params[key])
+      return validator.toInt(request.params[key])
     } else if("body" in request && key in request.body){
       return validator.toInt(request.body[key])
     } else {
@@ -39,7 +39,7 @@ exports.getObjectFromJsonString = function(request, key = "", defaultValue = {})
     if("query" in request && key in request.query){
       return JSON.parse(String(request.query[key]))
     } else if("params" in request && key in request.params){
-      return JSON.parse(String(params.params[key]))
+      return JSON.parse(String(request.params[key]))
     } else if("body" in request && key in request.body){
       return JSON.parse(String(request.body[key]))
     } else {
@@ -56,7 +56,7 @@ exports.getString = function(request, key = "", defaultValue = ""){
     if("query" in request && key in request.query){
       return String(request.query[key])
     } else if("params" in request && key in request.params){
-      return String(params.params[key])
+      return String(request.params[key])
     } else if("body" in request && key in request.body){
       return String(request.body[key])
     } else {

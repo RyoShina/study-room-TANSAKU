@@ -23,9 +23,6 @@
 
 <script>
 export default {
-  name: 'StudyRoomTANSAKUApps',
-  data: () => ({
-    drawer: null,
-  }),
+  name: 'StudyRoomTANSAKUApps'
 }
 </script>

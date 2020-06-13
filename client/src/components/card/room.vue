@@ -28,7 +28,9 @@
       <v-btn
         text
         color="deep-purple accent-4">
-        詳細
+        <router-link :to="{name:'RoomDetail', params: {roomId: card._id}}">
+          詳細へ
+        </router-link>
       </v-btn>
     </v-card-actions>
   </v-card>

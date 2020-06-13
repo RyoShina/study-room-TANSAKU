@@ -18,8 +18,12 @@ const roomsSchema = mongoose.Schema(
 );
 const rooms = mongoose.model("rooms", roomsSchema);
 
-exports.find = async function(condition, option) {
+exports.find = async function(condition, option) {  
   return await rooms.find(condition, null, option);
+};
+
+exports.findById = async function(id) {  
+  return await rooms.findById(id)
 };
 
 exports.countDocuments = async function(condition) {
